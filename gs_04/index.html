@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="../gs_04/style.css">
+    <title>Document</title>
+</head>
+<body>
+    <!-- random picture area -->
+    <section>
+        <p class="title">Picture Curtain</p>
+        <div id="gallary"></div>
+    </section>
+    <hr>
+    
+    <!-- map area -->
+    <p class="title">Random Map Walker</p>
+    <h5>select the curtain you like!</h5>
+      <div id="view"></div>
+      <div id="myMap" style="width: 90%; height: 25vw; margin: 20px"></div>
+
+      <div  id="point" class="point"></div>
+  
+      <!-- jQuery&GoogleMapsAPI -->
+      <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+      <script
+        src="https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AvAXTcB4g6nmi17YR8F253Wv3hixGUPCJOZuNYX857wfGWAlfNl-oSvCZt4bjiRz"
+        async
+        defer
+      ></script>
+      <script src="../gs_04/BmapQuery.js"></script>
+      <script>
+        //****************************************
+        //成功関数
+        //****************************************
+        let map;
+  
+        function mapsInit(position) {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          console.log(lat, lon);
+          
+          map = new Bmap("#myMap");
+          map.startMap(lat, lon, "load", 1000);
+          let pin = map.pin(lat, lon, "#ff0000");
+          map.infobox(lat, lon, `スタート！`);
+          
+          const setImgs = document.querySelectorAll('img');
+          setImgs.forEach((setImg)=>{
+              setImg.addEventListener('click',()=>{
+                  let arr2 = [Math.floor(Math.random()*3),Math.random()*3,Math.random()*3];
+                  
+                  let lat = Math.random()*2.5+34.4
+                  let lon = Math.random()*5+135
+                  console.log(lat, lon);
+                  
+                  map.startMap(lat, lon, "load", 20);
+                  let pin = map.pin(lat, lon, "#ff0000");
+                    map.infobox(lat, lon, `さあ、ここはどこかな？`, `lat:${lat}/lon:${lon}`);
+
+                    const score = document.createElement('p');
+                    let commentArr = ["これは点数没収だな。。","残念、100点","やったね、200点！","エクセレント、500点！","君はもうクリアだな"];
+                    if(lat<36 && lon<136){
+                        score.innerHTML = `${commentArr[0]}`;
+                    }else if (lat<36 && lon>136 && lon<138){
+                        score.innerHTML = `${commentArr[1]}`;
+                    }else if (lat>36 && lat <38 && lon>136 && lon<138){
+                        score.innerHTML = `${commentArr[2]}`;
+                    }else if (lat>36 && lat <38 && lon>138 && lon<139){
+                        score.innerHTML = `${commentArr[3]}`;
+                    }else {
+                        score.innerHTML = `${commentArr[4]}`;
+                    };
+                    console.log(score.innerHTML);
+                    document.getElementById('point').append(score);
+                });
+            });
+
+          //Infoboxを追加
+        }
+  
+        //****************************************
+        //失敗関数
+        //****************************************
+        function mapsError(error) {
+          let e = "";
+          if (error.code == 1) {
+            //1＝位置情報取得が許可されてない（ブラウザの設定）
+            e = "位置情報が許可されてません";
+          }
+          if (error.code == 2) {
+            //2＝現在地を特定できない
+            e = "現在位置を特定できません";
+          }
+          if (error.code == 3) {
+            //3＝位置情報を取得する前にタイムアウトになった場合
+            e = "位置情報を取得する前にタイムアウトになりました";
+          }
+          alert("エラー：" + e);
+        }
+  
+        //****************************************
+        //オプション設定
+        //****************************************
+        const set = {
+          enableHighAccuracy: true, //より高精度な位置を求める
+          maximumAge: 20000, //最後の現在地情報取得が20秒以内であればその情報を再利用する設定
+          timeout: 10000, //10秒以内に現在地情報を取得できなければ、処理を終了
+        };
+  
+        //最初に実行する関数
+        function GetMap() {
+          navigator.geolocation.getCurrentPosition(mapsInit, mapsError, set);
+        }
+      </script>
+
+
+<script src="../gs_04/randomimg.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+</body>
+</html>

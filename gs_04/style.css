@@ -1,0 +1,35 @@
+body{
+    background: linear-gradient(90deg, #d9e5f3 0%, #fff 100%);
+}
+#gallary,.search{
+    display: flex;
+    justify-content: start;
+    overflow: hidden;
+    align-items: center;
+    gap: 10px
+}
+.title{
+    font-size: 36px;
+    margin: 0;
+}
+img{
+    height: 40vh;
+    width: 5vh;
+    margin: 10px ;
+    border-radius: 10px;
+    object-fit: cover;
+    position: relative;
+    transition-duration: 2S;
+}
+img:hover{
+    opacity: 0.8;
+    box-shadow: 0 0 20px 10px rgb(100, 99, 99);
+}
+img.active{
+    Flex: 5;   
+}
+#point{
+    font-size: 24px;
+    margin-left: 20px;
+}
+
